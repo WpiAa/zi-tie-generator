@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#386957">
+  <meta name="description" content="书间，一方清静的习字天地。自定义汉字、词句、段落和笔画字帖，打印与保存。">
+  <title>书间 · 字帖</title>
+  <link rel="stylesheet" href="./style.css">
+  <script defer src="./assets/vendor/pinyin-pro.js"></script>
+  <script defer src="./assets/vendor/lucide.js"></script>
+  <script defer src="./local-fonts.js"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="书间首页"><span class="seal">书<br>间</span><span class="brand-name">书间<span class="brand-divider">/</span><span class="brand-sub">字帖</span></span></a>
+    <nav class="mode-nav" aria-label="字帖类型">
+      <button class="active" data-mode="hanzi"><i data-lucide="grid-2x2"></i>汉字字帖</button>
+      <button data-mode="words"><i data-lucide="whole-word"></i>词句字帖</button>
+      <button data-mode="paragraph"><i data-lucide="align-left"></i>段落字帖</button>
+      <button data-mode="strokes"><i data-lucide="pen-tool"></i>笔画字帖</button>
+    </nav>
+    <span class="header-motto">一笔一画，慢慢生花。</span>
+  </header>
+  <main>
+    <div class="workspace-heading"><div><h1 id="modeTitle">汉字字帖</h1><span class="heading-note">落笔有序，习字有心</span></div><div class="main-actions"><button id="reset" class="icon-button" title="恢复默认设置" aria-label="恢复默认设置"><i data-lucide="rotate-ccw"></i></button><button id="download" class="secondary"><i data-lucide="download"></i><span>保存图片</span></button><button id="print" class="primary"><i data-lucide="printer"></i><span>打印 / PDF</span></button></div></div>
+    <div class="workspace">
+      <aside class="editor-panel" aria-label="字帖内容">
+        <section class="editor-section"><h2><i data-lucide="notebook-pen"></i>习字内容<span id="charCount" class="count">0 字</span></h2><textarea id="content" aria-label="习字内容" spellcheck="false" maxlength="3000"></textarea><div class="editor-bottom"><span id="inputHint">每个汉字独占一行</span><button id="clear" class="text-button">清空</button></div></section>
+        <section class="editor-section"><h2><i data-lucide="bookmark"></i>选一段好时光</h2><div class="sample-list"><button data-sample="spring"><span>春日偶成</span><small>云淡风轻近午天</small><i data-lucide="arrow-up-right"></i></button><button data-sample="moon"><span>静夜思</span><small>床前明月光</small><i data-lucide="arrow-up-right"></i></button><button data-sample="nature"><span>山水清音</span><small>山川日月 · 草木春秋</small><i data-lucide="arrow-up-right"></i></button><button data-sample="daily"><span>日常词语</span><small>认真书写，好好生活</small><i data-lucide="arrow-up-right"></i></button></div></section>
+        <section class="editor-section page-heading"><h2><i data-lucide="heading"></i>纸上题签</h2><label for="sheetTitle">字帖标题</label><input id="sheetTitle" type="text" maxlength="32" placeholder="给今日的练习起个名字"><label class="switch-row"><span>姓名与日期栏</span><input id="showMeta" type="checkbox" role="switch"></label></section>
+        <div class="local-status"><span></span><span id="saveStatus">已保存在此浏览器</span></div>
+        <div class="editor-poem"><span>静 心</span><p>纸上得来终觉浅<br>一字一笔皆修行</p></div>
+      </aside>
+      <section class="preview-panel" aria-label="字帖预览">
+        <div class="preview-toolbar"><span class="preview-label"><span class="live-dot"></span>字帖预览</span><span>A4 <span class="muted">/ 210 × 297 mm</span></span><div class="zoom-controls"><button id="zoomOut" class="icon-button" title="缩小" aria-label="缩小"><i data-lucide="minus"></i></button><output id="zoomValue">适应</output><button id="zoomIn" class="icon-button" title="放大" aria-label="放大"><i data-lucide="plus"></i></button></div></div>
+        <div id="paperViewport" class="paper-viewport"><div id="paperWrap" class="paper-wrap"><canvas id="paper" aria-label="A4 字帖实时预览"></canvas></div></div>
+        <div class="preview-footer"><span id="layoutInfo"></span><div class="pagination"><button id="prevPage" class="icon-button" aria-label="上一页" title="上一页"><i data-lucide="chevron-left"></i></button><span id="pageInfo">1 / 1</span><button id="nextPage" class="icon-button" aria-label="下一页" title="下一页"><i data-lucide="chevron-right"></i></button></div><button id="fit" class="text-button"><i data-lucide="scan"></i>适应画布</button></div>
+      </section>
+      <aside class="settings-panel" aria-label="排版设置">
+        <div class="settings-title"><i data-lucide="sliders-horizontal"></i><h2>排版设置</h2></div>
+        <section><h3>格 式</h3><label for="grid">方格类型</label><div class="grid-choices" id="gridChoices"><button data-grid="mi" title="米字格" aria-label="米字格"><span class="grid-icon mi"></span><span>米字格</span></button><button data-grid="tian" title="田字格" aria-label="田字格"><span class="grid-icon tian"></span><span>田字格</span></button><button data-grid="hui" title="回米格" aria-label="回米格"><span class="grid-icon hui"></span><span>回米格</span></button><button data-grid="square" title="方格" aria-label="方格"><span class="grid-icon square"></span><span>方格</span></button></div>
+          <label class="range-label" for="cellSize">方格大小<output id="cellSizeValue"></output></label><input id="cellSize" type="range" min="10" max="25" step="1">
+          <label class="range-label" for="rowGap">行间距<output id="rowGapValue"></output></label><input id="rowGap" type="range" min="0" max="12" step="1">
+          <label class="select-row" for="margin">页边距<select id="margin"><option value="12">紧凑 · 12 mm</option><option value="20">标准 · 20 mm</option><option value="28">宽松 · 28 mm</option></select></label>
+        </section>
+        <section><h3>字 样</h3>
+          <button id="fontPickerTrigger" class="font-trigger" popovertarget="fontPicker" aria-haspopup="dialog" aria-controls="fontPicker" aria-expanded="false"><span>字体</span><span id="selectedFontName">楷体</span><i data-lucide="chevrons-up-down"></i></button>
+          <div id="fontPicker" popover="auto" role="dialog" aria-label="选择书写字体">
+          <div class="segmented font-tabs" role="group" aria-label="字体来源"><button data-font-source="common" aria-pressed="true">常用字体</button><button data-font-source="local" aria-pressed="false">本机字体</button></div>
+          <div id="commonFonts"><label class="font-list-field" for="font">书写字体<select id="font" size="4"><option value="kai">楷体</option><option value="brush">毛笔楷书</option><option value="song">宋体</option><option value="sans">黑体</option></select></label></div>
+          <div id="localFonts" hidden>
+            <div class="font-actions"><button id="scanFonts" class="secondary"><i data-lucide="folder-search"></i>读取本机字体</button><button id="importFont" class="icon-button" title="导入字体文件（TTF、OTF、WOFF、WOFF2）" aria-label="导入字体文件"><i data-lucide="file-up"></i></button></div>
+            <input id="fontFile" type="file" accept=".ttf,.otf,.woff,.woff2" hidden>
+            <div class="font-search"><i data-lucide="search"></i><input id="fontSearch" type="search" placeholder="输入字体名称查询…" aria-label="搜索本机字体" aria-controls="localFont" autocomplete="off" spellcheck="false"></div>
+            <label class="font-list-field" for="localFont">已载入字体<select id="localFont" size="6"><option value="">选择字体</option></select></label>
+            <p id="fontMatches" class="field-status" role="status" aria-live="polite"></p>
+            <p id="fontStatus" class="field-status" role="status">尚未载入</p>
+          </div>
+          </div>
+          <label class="range-label" for="fontSize">字体大小<output id="fontSizeValue"></output></label><input id="fontSize" type="range" min="45" max="90" step="1"><label class="range-label" for="offset">上下偏移<output id="offsetValue"></output></label><input id="offset" type="range" min="-15" max="15" step="1"><label class="switch-row"><span>显示拼音</span><input id="pinyin" type="checkbox" role="switch"></label><label id="highlightRow" class="switch-row"><span>首字加深</span><input id="highlight" type="checkbox" role="switch"></label><label class="switch-row"><span>插入空行</span><input id="blankRow" type="checkbox" role="switch"></label><label id="blankColRow" class="switch-row"><span>插入空列</span><input id="blankCol" type="checkbox" role="switch"></label>
+        </section>
+        <section id="hanziRowSettings"><h3>每 行 字 样</h3>
+          <label class="number-row" for="demoCount">示范字数量<input id="demoCount" type="number" min="0" step="1" inputmode="numeric"></label>
+          <label class="number-row" for="rowTraceCount">描红字数量<input id="rowTraceCount" type="number" min="0" step="1" inputmode="numeric"></label>
+          <div class="row-summary"><span id="rowSummary"></span><button id="resetRow" class="icon-button" title="恢复默认行布局" aria-label="恢复默认行布局"><i data-lucide="rotate-ccw"></i></button></div>
+          <div id="cellTools" class="segmented" role="group" aria-label="格子字样"><button data-cell-type="demo" aria-pressed="true">示范</button><button data-cell-type="trace" aria-pressed="false">描红</button><button data-cell-type="blank" aria-pressed="false">留白</button></div>
+          <div id="rowCells" class="row-cells" role="group" aria-label="每行格子位置"></div>
+        </section>
+        <section><h3>描 红</h3><div id="legacyTraceCount"><label class="range-label" for="traceCount">描红数量<output id="traceCountValue"></output></label><input id="traceCount" type="range" min="0" max="16" step="1"></div><label class="color-row" for="traceColor">描红颜色<input id="traceColor" type="color"></label><label class="color-row" for="lineColor">格线颜色<input id="lineColor" type="color"></label><div class="palette" aria-label="配色方案"><button data-palette="green" title="青竹" aria-label="青竹" style="--swatch:#73968a"></button><button data-palette="red" title="朱砂" aria-label="朱砂" style="--swatch:#bd7975"></button><button data-palette="gray" title="烟墨" aria-label="烟墨" style="--swatch:#989da5"></button><button data-palette="blue" title="天青" aria-label="天青" style="--swatch:#8aa9bd"></button></div></section>
+      </aside>
+    </div>
+    <footer class="site-footer"><span>书间 <span class="footer-dot">·</span> 留一方纸，安放笔墨</span><span>今日亦是习字好时节</span></footer>
+  </main>
+  <div id="toast" role="status" aria-live="polite"></div><div id="printPages" aria-hidden="true"></div>
+</body>
+</html>
